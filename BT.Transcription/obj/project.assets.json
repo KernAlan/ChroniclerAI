@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\BT.Transcription.csproj",
-      "projectName": "BT.Transcription",
-      "projectPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\BT.Transcription.csproj",
+      "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\JoshAndAlanTool.csproj",
+      "projectName": "JoshAndAlanTool",
+      "projectPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\JoshAndAlanTool.csproj",
       "packagesPath": "C:\\Users\\AlanKern\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\obj\\",
       "projectStyle": "PackageReference",

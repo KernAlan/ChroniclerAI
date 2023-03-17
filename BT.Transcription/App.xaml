@@ -1,7 +1,7 @@
-﻿<Application x:Class="BT.Transcription.App"
+﻿<Application x:Class="JoshAndAlanTool.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:BT.Transcription"
+             xmlns:local="clr-namespace:JoshAndAlanTool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BT.Transcription
+namespace JoshAndAlanTool
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -42,6 +42,19 @@ namespace BT.Transcription
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             return;
+        }
+
+        private async void Transcribe(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var result = await Transcribe();
+                // Do something with the transcribed text result
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Transcription failed: {ex.Message}");
+            }
         }
 
         private async Task<string> Transcribe()
@@ -82,7 +95,7 @@ namespace BT.Transcription
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
