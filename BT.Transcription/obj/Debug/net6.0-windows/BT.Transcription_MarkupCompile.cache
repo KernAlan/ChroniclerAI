@@ -1,5 +1,5 @@
 ﻿BT.Transcription
-1.0.0.0
+
 
 winexe
 C#
@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\AlanKern\source\repos\BT.Transcription\BT.Transcription\App.xaml
 11407045341
 
-5-1296793165
+3-1233169557
 194-1617825143
 MainWindow.xaml;
 
-True
+False
 
