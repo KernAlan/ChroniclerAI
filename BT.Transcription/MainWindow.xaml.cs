@@ -24,6 +24,7 @@ namespace JoshAndAlanTool
     {
         private string? _apiKey;
         private string? _audioFilePath;
+        private string? _outputText;
 
         public string? ApiKey
         {
@@ -33,6 +34,13 @@ namespace JoshAndAlanTool
                 if (_apiKey != value)
                 {
                     _apiKey = value;
+
+                    // Trim the API key if it has leading or trailing whitespace
+                    if (_apiKey is not null)
+                    {
+                        _apiKey = _apiKey.Trim();
+                    }
+                    
                     OnPropertyChanged(nameof(ApiKey));
                 }
             }
@@ -50,7 +58,20 @@ namespace JoshAndAlanTool
                 }
             }
         }
-    
+
+        public string? OutputText
+        {
+            get => _outputText;
+            set
+            {
+                if (_outputText != value)
+                {
+                    _outputText = value;
+                    OnPropertyChanged(nameof(OutputText));
+                }
+            }
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -84,7 +105,8 @@ namespace JoshAndAlanTool
             try
             {
                 var result = await Transcribe();
-                // Do something with the transcribed text result
+                OutputText += "\n" + result;
+                
             }
             catch (Exception ex)
             {
@@ -108,7 +130,7 @@ namespace JoshAndAlanTool
 
                 using (var client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "TOKEN");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
 
                     using (var content = new MultipartFormDataContent())
                     {
