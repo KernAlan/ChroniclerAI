@@ -20,14 +20,49 @@ namespace JoshAndAlanTool
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public string? ApiKey { get; set; }
-        public string? AudioFilePathTextBox { get; set; }
+        private string? _apiKey;
+        private string? _audioFilePath;
+
+        public string? ApiKey
+        {
+            get => _apiKey;
+            set
+            {
+                if (_apiKey != value)
+                {
+                    _apiKey = value;
+                    OnPropertyChanged(nameof(ApiKey));
+                }
+            }
+        }
+
+        public string? AudioFilePath
+        {
+            get => _audioFilePath;
+            set
+            {
+                if (_audioFilePath != value)
+                {
+                    _audioFilePath = value;
+                    OnPropertyChanged(nameof(AudioFilePath));
+                }
+            }
+        }
+    
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -61,7 +96,7 @@ namespace JoshAndAlanTool
         {
             try
             {
-                if (AudioFilePathTextBox is null)
+                if (AudioFilePath is null)
                 {
                     throw new ArgumentNullException("No audio file detected!");
                 }
@@ -77,7 +112,7 @@ namespace JoshAndAlanTool
 
                     using (var content = new MultipartFormDataContent())
                     {
-                        content.Add(new StreamContent(File.OpenRead(AudioFilePathTextBox)), "file", System.IO.Path.GetFileName(AudioFilePathTextBox));
+                        content.Add(new StreamContent(File.OpenRead(AudioFilePath)), "file", System.IO.Path.GetFileName(AudioFilePath));
                         content.Add(new StringContent("whisper-1"), "model");
 
                         using (var response = await client.PostAsync("https://api.openai.com/v1/audio/transcriptions", content))
@@ -89,7 +124,8 @@ namespace JoshAndAlanTool
                             }
                             else
                             {
-                                throw new Exception($"Request failed with status code {response.StatusCode}: {await response.Content.ReadAsStringAsync()}");
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                throw new Exception($"Request failed with status code {response.StatusCode}: {responseContent}");
                             }
                         }
                     }
@@ -108,7 +144,8 @@ namespace JoshAndAlanTool
             var openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                AudioFilePathTextBox = openFileDialog.FileName;
+                AudioFilePath = openFileDialog.FileName;
+                OnPropertyChanged(nameof(AudioFilePath));
             }
         }
     }

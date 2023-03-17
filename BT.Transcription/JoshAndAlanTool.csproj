@@ -8,14 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="976062.jpg" />
-    <None Remove="b81aa44ba47c8ebb93c4525a96904101.jpg" />
     <None Remove="BTLogo2022.png" />
+    <None Remove="stardewvalley.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="976062.jpg" />
-    <Resource Include="b81aa44ba47c8ebb93c4525a96904101.jpg" />
+    <Resource Include="stardewvalley.jpg" />
     <Resource Include="BTLogo2022.png" />
   </ItemGroup>
 
