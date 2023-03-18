@@ -1,7 +1,7 @@
-﻿<Application x:Class="JoshAndAlanTool.App"
+﻿<Application x:Class="ChroniclerAI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:JoshAndAlanTool"
+             xmlns:local="clr-namespace:ChroniclerAI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

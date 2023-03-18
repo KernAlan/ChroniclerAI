@@ -1,8 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "llR1Q+jA+/QfBSGmtbB8v1Ye8nhMW/I1kwHYwqCh+FQrUj0y7VVMpvyNw9Q2C1WdmzR27cNxv78dx1tUdwLp4g==",
+  "dgSpecHash": "SMS3wQ0ucj/6Y8csF82evAtY0jhqVERNkajW5gEH8t9GdtPHr4SAtAy03VLjEXmAF+rdXTrlxTBG/HGWUweWLA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\JoshAndAlanTool.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\AlanKern\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio\\2.1.0\\naudio.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.asio\\2.1.0\\naudio.asio.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.core\\2.1.0\\naudio.core.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.lame\\2.0.1\\naudio.lame.2.0.1.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.midi\\2.1.0\\naudio.midi.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.wasapi\\2.1.0\\naudio.wasapi.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.winforms\\2.1.0\\naudio.winforms.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\naudio.winmm\\2.1.0\\naudio.winmm.2.1.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
+    "C:\\Users\\AlanKern\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512"
+  ],
   "logs": []
 }

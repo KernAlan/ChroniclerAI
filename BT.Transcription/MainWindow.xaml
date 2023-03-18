@@ -1,11 +1,11 @@
-﻿<Window x:Class="JoshAndAlanTool.MainWindow"
+﻿<Window x:Class="ChroniclerAI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:JoshAndAlanTool"
+        xmlns:local="clr-namespace:ChroniclerAI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Icon="/BTLogo2022.png">
+        Title="MainWindow" Height="768" Width="1024" Icon="/BTLogo2022.png">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/stardewvalley.jpg" Stretch="UniformToFill"/>
@@ -19,11 +19,11 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Josh &amp; Alan's Tool v1" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
+        <Label Content="Chronicler AI v1" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0,0,20">
-            <TextBox x:Name="OutputTextBox" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="600" Text="{Binding OutputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-
+            <TextBox x:Name="OutputTextBox" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="75,10,50,20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="600" Text="{Binding OutputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" MinWidth="597"/>
         </StackPanel>
+
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="150" Margin="20">
             <Label Content="Audio File"/>
             <DockPanel>
@@ -34,8 +34,9 @@
             <DockPanel>
                 <TextBox Text="{Binding ApiKey, Mode=TwoWay}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" HorizontalAlignment="Stretch"/>
             </DockPanel>
+            <Button x:Name="RecordButton" Content="Start Recording" Click="RecordButton_Click" Margin="20,20,20,0"/>
             <Button Content="Transcribe" Click="Transcribe" Margin="20,10,20,0"/>
-            <Label Content="GPT-4" Margin="0, 10, 0, 0"/>
+            <Label Content="GPT-4 (coming soon)" Margin="0, 10, 0, 0"/>
             <Button Content="Summarize" Click="Button_Click" Margin="20,10,20,0"/>
             <Button Content="Highlight" Click="Button_Click" Margin="20,10,20,0"/>
             <Button Content="Enumerate" Click="Button_Click" Margin="20,10,20,0"/>

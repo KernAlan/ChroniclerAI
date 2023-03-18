@@ -14,8 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.Generic;
 
-namespace JoshAndAlanTool
+namespace ChroniclerAI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,7 +25,10 @@ namespace JoshAndAlanTool
     {
         private string? _apiKey;
         private string? _audioFilePath;
-        private string? _outputText;
+        private List<string> _outputText = new List<string>();
+        private static string _recordedAudioFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recordedaudio.mp3");
+        private AudioRecorder _recorder;
+        private bool _isRecording;
 
         public string? ApiKey
         {
@@ -40,12 +44,17 @@ namespace JoshAndAlanTool
                     {
                         _apiKey = _apiKey.Trim();
                     }
-                    
+
+                    if (_apiKey is not null && _apiKey.Length > 0)
+                    {
+                        SaveApiKeyToFile(_apiKey);
+                    }
+
                     OnPropertyChanged(nameof(ApiKey));
                 }
             }
         }
-
+        
         public string? AudioFilePath
         {
             get => _audioFilePath;
@@ -59,7 +68,7 @@ namespace JoshAndAlanTool
             }
         }
 
-        public string? OutputText
+        public List<string> OutputText
         {
             get => _outputText;
             set
@@ -81,6 +90,9 @@ namespace JoshAndAlanTool
         {
             InitializeComponent();
             DataContext = this;
+            LoadApiKeyFromFile();
+            _isRecording = false;
+            _recorder = new AudioRecorder(_recordedAudioFilePath);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -104,9 +116,16 @@ namespace JoshAndAlanTool
         {
             try
             {
-                var result = await Transcribe();
-                OutputText += "\n" + result;
+                var result = await ProcessTranscribe();
                 
+                if (result is null)
+                {
+                    throw new ArgumentNullException("There was nothing to transcribe!");
+                }
+                
+                OutputText.Add(result);
+                OnPropertyChanged(nameof(OutputText));
+                UpdateOutputTextBox();
             }
             catch (Exception ex)
             {
@@ -114,7 +133,7 @@ namespace JoshAndAlanTool
             }
         }
 
-        private async Task<string> Transcribe()
+        private async Task<string> ProcessTranscribe()
         {
             try
             {
@@ -136,6 +155,7 @@ namespace JoshAndAlanTool
                     {
                         content.Add(new StreamContent(File.OpenRead(AudioFilePath)), "file", System.IO.Path.GetFileName(AudioFilePath));
                         content.Add(new StringContent("whisper-1"), "model");
+                        content.Add(new StringContent("text"), "response_format");
 
                         using (var response = await client.PostAsync("https://api.openai.com/v1/audio/transcriptions", content))
                         {
@@ -160,7 +180,11 @@ namespace JoshAndAlanTool
            
         }
 
-
+        private void UpdateOutputTextBox()
+        {
+            OutputTextBox.Text += string.Join(Environment.NewLine, OutputText);
+        }
+        
         private void Browse(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
@@ -168,6 +192,70 @@ namespace JoshAndAlanTool
             {
                 AudioFilePath = openFileDialog.FileName;
                 OnPropertyChanged(nameof(AudioFilePath));
+            }
+        }
+
+        public void SaveApiKeyToFile(string apiKey)
+        {
+            try
+            {
+                File.WriteAllText("apiKey.txt", apiKey);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"API Key save failed: {ex.Message}");
+            }
+        }
+
+        public void LoadApiKeyFromFile()
+        {
+            try
+            {
+                string apiKeyFromFile = File.ReadAllText("apiKey.txt");
+                ApiKey = apiKeyFromFile;
+            }
+            catch (Exception)
+            {
+                // If we catch an error reading the file, assume this is the first time the app has been run, and create the initial .txt file
+                SaveApiKeyToFile("API Key");
+            }
+
+        }
+
+        public void RecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!_isRecording)
+                {
+                    _recorder.StartRecording();
+                    RecordButton.Content = "Stop Recording";
+                    _isRecording = true;
+                }
+                else
+                {
+                    StopRecording(sender, e);
+                    RecordButton.Content = "Start Recording";
+                    _isRecording = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to start recording: {ex.Message}");
+            }
+            
+        }
+        
+        public void StopRecording(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _recorder.StopRecording();
+                AudioFilePath = _recordedAudioFilePath;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to stop recording: {ex.Message}");
             }
         }
     }
