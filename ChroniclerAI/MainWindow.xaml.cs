@@ -29,6 +29,7 @@ namespace ChroniclerAI
         private static string _recordedAudioFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recordedaudio.mp3");
         private AudioRecorder _recorder;
         private bool _isRecording;
+        private HttpClient _client = new HttpClient();
 
         public string? ApiKey
         {
@@ -80,6 +81,12 @@ namespace ChroniclerAI
                 }
             }
         }
+        
+        public string OutputTextString
+        {
+            get => string.Join(Environment.NewLine, _outputText);
+        }
+
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -93,6 +100,7 @@ namespace ChroniclerAI
             LoadApiKeyFromFile();
             _isRecording = false;
             _recorder = new AudioRecorder(_recordedAudioFilePath);
+            _client.Timeout = TimeSpan.FromSeconds(600);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -116,6 +124,9 @@ namespace ChroniclerAI
         {
             try
             {
+                TranscribeButton.IsEnabled = false;
+                TranscribeButton.Content = "Transcribing...";
+                
                 var result = await ProcessTranscribe();
                 
                 if (result is null)
@@ -130,6 +141,11 @@ namespace ChroniclerAI
             catch (Exception ex)
             {
                 MessageBox.Show($"Transcription failed: {ex.Message}");
+            }
+            finally
+            {
+                TranscribeButton.IsEnabled = true;
+                TranscribeButton.Content = "Transcribe";
             }
         }
 
@@ -182,7 +198,7 @@ namespace ChroniclerAI
 
         private void UpdateOutputTextBox()
         {
-            OutputTextBox.Text += string.Join(Environment.NewLine, OutputText);
+            OnPropertyChanged(nameof(OutputTextString));
         }
         
         private void Browse(object sender, RoutedEventArgs e)

@@ -18,10 +18,14 @@
           "System.Security.Principal.Windows": "4.7.0"
         },
         "compile": {
-          "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {}
+          "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
+          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
@@ -45,10 +49,14 @@
           "NAudio.WinMM": "2.1.0"
         },
         "compile": {
-          "lib/net6.0-windows7.0/NAudio.dll": {}
+          "lib/net6.0-windows7.0/NAudio.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net6.0-windows7.0/NAudio.dll": {}
+          "lib/net6.0-windows7.0/NAudio.dll": {
+            "related": ".xml"
+          }
         }
       },
       "NAudio.Asio/2.1.0": {
@@ -79,10 +87,14 @@
           "NAudio.Core": "2.0.0"
         },
         "compile": {
-          "lib/netstandard2.0/NAudio.Lame.dll": {}
+          "lib/netstandard2.0/NAudio.Lame.dll": {
+            "related": ".pdb"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/NAudio.Lame.dll": {}
+          "lib/netstandard2.0/NAudio.Lame.dll": {
+            "related": ".pdb"
+          }
         },
         "build": {
           "build/NAudio.Lame.targets": {}
@@ -147,10 +159,14 @@
           "System.Security.Principal.Windows": "4.7.0"
         },
         "compile": {
-          "ref/netstandard2.0/System.Security.AccessControl.dll": {}
+          "ref/netstandard2.0/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Security.AccessControl.dll": {}
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
@@ -162,10 +178,14 @@
       "System.Security.Principal.Windows/4.7.0": {
         "type": "package",
         "compile": {
-          "ref/netcoreapp3.0/System.Security.Principal.Windows.dll": {}
+          "ref/netcoreapp3.0/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {}
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
@@ -478,11 +498,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+      "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj",
       "projectName": "ChroniclerAI",
-      "projectPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+      "projectPath": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj",
       "packagesPath": "C:\\Users\\AlanKern\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\obj\\",
+      "outputPath": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -492,7 +512,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net6.0-windows7.0"
+        "net6.0-windows"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -530,7 +550,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -542,7 +563,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.310\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

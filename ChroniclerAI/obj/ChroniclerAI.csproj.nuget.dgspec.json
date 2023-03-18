@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj": {}
+    "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj": {
+    "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+        "projectUniqueName": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj",
         "projectName": "ChroniclerAI",
-        "projectPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+        "projectPath": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj",
         "packagesPath": "C:\\Users\\AlanKern\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\obj\\",
+        "outputPath": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -21,7 +21,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0-windows7.0"
+          "net6.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -59,7 +59,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -71,7 +72,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.310\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

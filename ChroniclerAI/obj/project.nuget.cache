@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SMS3wQ0ucj/6Y8csF82evAtY0jhqVERNkajW5gEH8t9GdtPHr4SAtAy03VLjEXmAF+rdXTrlxTBG/HGWUweWLA==",
+  "dgSpecHash": "ca3a/Xs6GxWPdhHZ54OF3FWsKKRfdzDZ25rirJ0fIpRDkuUNeOInOvvU7+sSQOz1GFgyoC0WCKiC31FAhhhGNw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\AlanKern\\source\\repos\\BT.Transcription\\BT.Transcription\\ChroniclerAI.csproj",
+  "projectFilePath": "C:\\Users\\AlanKern\\source\\repos\\ChroniclerAI\\ChroniclerAI\\ChroniclerAI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\AlanKern\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\AlanKern\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
