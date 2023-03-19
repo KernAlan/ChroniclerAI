@@ -124,17 +124,42 @@ namespace ChroniclerAI
         {
             try
             {
+                if (string.IsNullOrEmpty(AudioFilePath))
+                {
+                    throw new ArgumentNullException("No audio file detected!");
+                }
                 TranscribeButton.IsEnabled = false;
                 TranscribeButton.Content = "Transcribing...";
-                
-                var result = await ProcessTranscribe();
+                var result = "";
+
+                // If the audio file exceeds 25mb, confirm to the user, and split it into 10 min files, and process each one individualls
+                if (new FileInfo(AudioFilePath).Length > 25 * 1024 * 1024)
+                {
+                    MessageBoxResult confirmation = MessageBox.Show("Warning: this file is over 25mb. You can either split this file yourself, or Chronicler will split it into 10 min chunks for you. Is this OK?",
+                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (confirmation == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                    var splitAudioFilePaths = SplitFile();
+                    foreach (var file in splitAudioFilePaths)
+                    {
+                        AudioFilePath = file;
+                        result = await ProcessTranscribe();
+                        OutputText.Add(result);
+                    }
+                }
+                else
+                {
+                    result = await ProcessTranscribe();
+                    OutputText.Add(result);
+                }
                 
                 if (result is null)
                 {
-                    throw new ArgumentNullException("There was nothing to transcribe!");
+                    throw new ArgumentNullException("Transcription returned empty!");
                 }
                 
-                OutputText.Add(result);
                 OnPropertyChanged(nameof(OutputText));
                 UpdateOutputTextBox();
             }
@@ -272,6 +297,25 @@ namespace ChroniclerAI
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to stop recording: {ex.Message}");
+            }
+        }
+
+        public List<string> SplitFile()
+        {
+            try
+            {
+                if (AudioFilePath is null)
+                {
+                    throw new ArgumentNullException("Cannot split an empty or nonexistent file.");
+                }
+                var audioSplitter = new AudioSplitter();
+                var splitFilesList = audioSplitter.SplitAudio(AudioFilePath, Directory.GetCurrentDirectory(), TimeSpan.FromMinutes(10));
+                return splitFilesList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to split file: {ex.Message}");
+                return new List<string>();
             }
         }
     }
