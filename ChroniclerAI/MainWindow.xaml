@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChroniclerAI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="768" Width="1024" Icon="/BTLogo2022.png">
+        Title="ChroniclerAI" Height="768" Width="1024" Icon="/mainicon.png">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/stardewvalley.jpg" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="/bg3.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
