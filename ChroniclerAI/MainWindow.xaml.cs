@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ChroniclerAI
 {
@@ -135,7 +136,7 @@ namespace ChroniclerAI
                 // If the audio file exceeds 25mb, confirm to the user, and split it into 10 min files, and process each one individualls
                 if (new FileInfo(AudioFilePath).Length > 25 * 1024 * 1024)
                 {
-                    MessageBoxResult confirmation = MessageBox.Show("Warning: this file is over 25mb. You can either split this file yourself, or Chronicler will split it into 10 min chunks for you. Is this OK?",
+                    MessageBoxResult confirmation = MessageBox.Show("This file is over 25mb. You can either split this file yourself, or Chronicler will split it into 10 min chunks for you. Is this OK?",
                         "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (confirmation == MessageBoxResult.No)
                     {
@@ -317,6 +318,52 @@ namespace ChroniclerAI
                 MessageBox.Show($"Failed to split file: {ex.Message}");
                 return new List<string>();
             }
+        }
+
+        public void OpenAIAPIKeys(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string url = "https://platform.openai.com/account/api-keys";
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open OpenAI API Keys page: {ex.Message}");
+            }
+        }
+
+        public void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Copyright © 2023 Alan Kern. This software was a labor of love provided free of charge and open-sourced via an MIT license.");
+
+        }
+        
+        public void Donate_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://www.paypal.com/donate/?business=7CEJDV8VQ9BTL&no_recurring=0&currency_code=USD";
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        public void Readme_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://github.com/KernAlan/ChroniclerAI";
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
     }
 }

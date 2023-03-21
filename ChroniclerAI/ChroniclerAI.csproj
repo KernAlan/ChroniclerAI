@@ -12,7 +12,6 @@
     <None Remove="bg2.jpg" />
     <None Remove="bg3.jpg" />
     <None Remove="mainicon.png" />
-    <None Remove="stardewvalley.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +22,6 @@
   <ItemGroup>
     <Resource Include="bg3.jpg" />
     <Resource Include="mainicon.png" />
-    <Resource Include="stardewvalley.jpg" />
   </ItemGroup>
 
 </Project>
