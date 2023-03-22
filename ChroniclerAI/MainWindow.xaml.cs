@@ -188,29 +188,25 @@ namespace ChroniclerAI
                 {
                     throw new ArgumentNullException("No API key detected!");
                 }
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
 
-                using (var client = new HttpClient())
+                using (var content = new MultipartFormDataContent())
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
+                    content.Add(new StreamContent(File.OpenRead(AudioFilePath)), "file", System.IO.Path.GetFileName(AudioFilePath));
+                    content.Add(new StringContent("whisper-1"), "model");
+                    content.Add(new StringContent("text"), "response_format");
 
-                    using (var content = new MultipartFormDataContent())
+                    using (var response = await _client.PostAsync("https://api.openai.com/v1/audio/transcriptions", content))
                     {
-                        content.Add(new StreamContent(File.OpenRead(AudioFilePath)), "file", System.IO.Path.GetFileName(AudioFilePath));
-                        content.Add(new StringContent("whisper-1"), "model");
-                        content.Add(new StringContent("text"), "response_format");
-
-                        using (var response = await client.PostAsync("https://api.openai.com/v1/audio/transcriptions", content))
+                        if (response.IsSuccessStatusCode)
                         {
-                            if (response.IsSuccessStatusCode)
-                            {
-                                var responseContent = await response.Content.ReadAsStringAsync();
-                                return responseContent;
-                            }
-                            else
-                            {
-                                var responseContent = await response.Content.ReadAsStringAsync();
-                                throw new Exception($"Request failed with status code {response.StatusCode}: {responseContent}");
-                            }
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            return responseContent;
+                        }
+                        else
+                        {
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            throw new Exception($"Request failed with status code {response.StatusCode}: {responseContent}");
                         }
                     }
                 }
