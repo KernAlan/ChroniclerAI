@@ -2,6 +2,8 @@
 
 ChroniclerAI is a desktop application that records, transcribes, and summarizes audio using the OpenAI GPT-3.5-turbo model. The application is built in C# with XAML for the user interface.
 
+Turn any audio into query-able text: your really long technical meeting, that interview you couldn't make, or zoom training you were supposed to watch before end of week.
+
 # Features
 
 - Record live audio
@@ -25,8 +27,6 @@ Clone the repository:
 3. Build the solution and run the application.
 
 # Usage
-
-Turn any audio into query-able text: your really long technical meeting, that interview you couldn't make, or zoom training you were supposed to watch before end of week.
 
 1. (Optional) You can record live audio from your system input. This will be saved as recordedaudio.mp3 in your root folder of Chronciler. 
 2. Enter your API key from Open AI -- or optionally press the "I need an API key" button to be directed to the page you can get one
