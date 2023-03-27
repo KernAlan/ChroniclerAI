@@ -7,15 +7,9 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ChroniclerAI
 {
@@ -86,8 +80,11 @@ namespace ChroniclerAI
         public string OutputTextString
         {
             get => string.Join(Environment.NewLine, _outputText);
+            set
+            {
+                OutputText = value.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+            }
         }
-
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -133,10 +130,17 @@ namespace ChroniclerAI
                 TranscribeButton.Content = "Transcribing...";
                 var result = "";
 
+                MessageBoxResult initConfirmation = MessageBox.Show("Confirming you would like to transcribe the selected audio file?",
+                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (initConfirmation == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 // If the audio file exceeds 25mb, confirm to the user, and split it into 10 min files, and process each one individualls
                 if (new FileInfo(AudioFilePath).Length > 25 * 1024 * 1024)
                 {
-                    MessageBoxResult confirmation = MessageBox.Show("This file is over 25mb. You can either split this file yourself, or Chronicler will split it into 10 min chunks for you. Is this OK?",
+                    MessageBoxResult confirmation = MessageBox.Show("This file is over 25mb. You can either split this file yourself, or Chronicler will split it into 10 min copy chunks for you. Is this OK?",
                         "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (confirmation == MessageBoxResult.No)
                     {
@@ -305,6 +309,7 @@ namespace ChroniclerAI
                 {
                     throw new ArgumentNullException("Cannot split an empty or nonexistent file.");
                 }
+                
                 var audioSplitter = new AudioSplitter();
                 var splitFilesList = audioSplitter.SplitAudio(AudioFilePath, Directory.GetCurrentDirectory(), TimeSpan.FromMinutes(10));
                 return splitFilesList;
@@ -314,6 +319,178 @@ namespace ChroniclerAI
                 MessageBox.Show($"Failed to split file: {ex.Message}");
                 return new List<string>();
             }
+        }
+
+        public async void Summarize(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ApiKey is null)
+                {
+                    throw new ArgumentNullException("API Key must not be empty.");
+                }
+
+                if (OutputText is null)
+                {
+                    throw new ArgumentNullException("Nothing to summarize.");
+                }
+
+                SummarizeButton.IsEnabled = false;
+                SummarizeButton.Content = "Summarizing...";
+                var chatGptRepo = new ChatGptApiClient(ApiKey);
+                var summary = "SUMMARY: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Summarize);
+                
+                if (string.IsNullOrEmpty(summary))
+                {
+                    throw new ArgumentNullException("Summary was empty.");
+                }
+
+                OutputText.Add(summary);
+                OnPropertyChanged(nameof(OutputText));
+                UpdateOutputTextBox();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to summarize: {ex.Message}");
+            }
+            finally
+            {
+
+            }
+            SummarizeButton.IsEnabled = true;
+            SummarizeButton.Content = "Summarize";
+        }
+
+        public async void Highlight(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ApiKey is null)
+                {
+                    throw new ArgumentNullException("API Key must not be empty.");
+                }
+
+                if (OutputText is null)
+                {
+                    throw new ArgumentNullException("Error: Nothing to highlight.");
+                }
+
+                HighlightButton.IsEnabled = false;
+                HighlightButton.Content = "Highlighting...";
+                var chatGptRepo = new ChatGptApiClient(ApiKey);
+                var highlights = "HIGHLIGHTS: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Highlight);
+
+                if (string.IsNullOrEmpty(highlights))
+                {
+                    throw new ArgumentNullException("Highlights were empty.");
+                }
+
+                OutputText.Add(highlights);
+                OnPropertyChanged(nameof(OutputText));
+                UpdateOutputTextBox();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to highlight: {ex.Message}");
+            }
+            finally
+            {
+
+            }
+            HighlightButton.IsEnabled = true;
+            HighlightButton.Content = "Highlight";
+        }
+
+        public async void Enumerate(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ApiKey is null)
+                {
+                    throw new ArgumentNullException("API Key must not be empty.");
+                }
+
+                if (OutputText is null)
+                {
+                    throw new ArgumentNullException("Error: Nothing to Enumerate.");
+                }
+
+                EnumerateButton.IsEnabled = false;
+                EnumerateButton.Content = "Enumerating...";
+                var chatGptRepo = new ChatGptApiClient(ApiKey);
+                var enumerations = "ENUMERATIONS: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Enumerate);
+
+                if (string.IsNullOrEmpty(enumerations))
+                {
+                    throw new ArgumentNullException("Enumerations were empty.");
+                }
+
+                OutputText.Add(enumerations);
+                OnPropertyChanged(nameof(OutputText));
+                UpdateOutputTextBox();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to enumerate: {ex.Message}");
+            }
+            finally
+            {
+
+            }
+            EnumerateButton.IsEnabled = true;
+            EnumerateButton.Content = "Enumerate";
+        }
+
+        public async void Ask(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ApiKey is null)
+                {
+                    throw new ArgumentNullException("API Key must not be empty.");
+                }
+
+                if (OutputText is null)
+                {
+                    throw new ArgumentNullException("There is nothing to ask of in the text box.");
+                }
+
+                var inputString = Microsoft.VisualBasic.Interaction.InputBox("Enter your question or command here", "Custom Ask or Command", "");
+                
+                if (string.IsNullOrEmpty(inputString))
+                {
+                    throw new InvalidOperationException("No question or command was input.");
+                }
+                
+                if (inputString.Count() > 256)
+                {
+                    throw new InvalidOperationException("Input was too long. Keep the input to a maximum of 256 characters");
+                }
+
+                AskButton.IsEnabled = false;
+                AskButton.Content = "Asking...";
+                var chatGptRepo = new ChatGptApiClient(ApiKey);
+                var response = "RESPONSE: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Ask);
+
+                if (string.IsNullOrEmpty(response))
+                {
+                    throw new ArgumentNullException("Response was empty.");
+                }
+
+                OutputText.Add(response);
+                OnPropertyChanged(nameof(OutputText));
+                UpdateOutputTextBox();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to respond: {ex.Message}");
+            }
+            finally
+            {
+
+            }
+            AskButton.IsEnabled = true;
+            AskButton.Content = "Ask";
         }
 
         public void OpenAIAPIKeys(object sender, RoutedEventArgs e)
@@ -360,6 +537,13 @@ namespace ChroniclerAI
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            OutputText = new List<string>();
+            OnPropertyChanged(nameof(OutputText));
+            UpdateOutputTextBox();
         }
     }
 }

@@ -37,6 +37,13 @@ C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-wind
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\ChroniclerAI.runtimeconfig.json
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\ChroniclerAI.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\ChroniclerAI.pdb
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.Http.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.Options.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Microsoft.Extensions.Primitives.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.Asio.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.Core.dll
@@ -45,6 +52,7 @@ C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-wind
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.Wasapi.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.WinForms.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\NAudio.WinMM.dll
+C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\bin\Release\net6.0-windows\Newtonsoft.Json.dll
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\obj\Release\net6.0-windows\ChroniclerAI.csproj.AssemblyReference.cache
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\obj\Release\net6.0-windows\MainWindow.g.cs
 C:\Users\AlanKern\source\repos\ChroniclerAI\ChroniclerAI\obj\Release\net6.0-windows\App.g.cs
