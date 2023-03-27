@@ -4,6 +4,8 @@ ChroniclerAI is a desktop application that records, transcribes, and summarizes 
 
 Turn any audio into query-able text: your really long technical meeting, that interview you couldn't make, or zoom training you were supposed to watch before end of week.
 
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
+
 # Features
 
 - Record live audio
