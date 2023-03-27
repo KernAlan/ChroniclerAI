@@ -4,12 +4,12 @@ ChroniclerAI is a desktop application that records, transcribes, and summarizes 
 
 # Features
 
-Record audio
-Transcribe recorded audio
-Summarize transcriptions
-Highlight key quotes from transcriptions
-Enumerate main points of transcriptions
-Ask questions or give commands related to transcriptions
+- Record live audio
+- Transcribe recorded audio
+- Summarize and save transcriptions
+- Highlight key quotes from transcriptions
+- Enumerate main points of transcriptions
+- Ask questions or give commands related to transcriptions
 
 # Prerequisites
 
