@@ -20,7 +20,7 @@ Windows 10 or later
 
 Clone the repository:
 
-1. Clone the repo: git clone https://github.com/yourusername/ChroniclerAI.git
+1. Clone the repo
 2. Open the solution in Visual Studio.
 3. Build the solution and run the application.
 
