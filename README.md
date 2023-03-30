@@ -6,13 +6,14 @@ Turn any audio into query-able text: your really long technical meeting, that in
 
 Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
+![image](https://user-images.githubusercontent.com/63753020/228726833-d0102938-4be6-4ed5-85ce-0b7201c98549.png)
+
 # Features
 
-- Record live audio
-- Transcribe recorded audio
+- Transcribe recorded audio.
 - Summarize and save transcriptions
 - Highlight key quotes from transcriptions
-- Enumerate main points of transcriptions
+- Enumerate main points of transcriptions (i.e. list main points in the transcript)
 - Ask questions or give commands related to transcriptions
 
 # Prerequisites
@@ -22,23 +23,27 @@ Windows 10 or later
 
 # Installation
 
-Clone the repository:
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
-1. Clone the repo
+Or, if you're a developer:
+
+1. Clone the repo: git clone https://github.com/KernAlan/ChroniclerAI.git
 2. Open the solution in Visual Studio.
 3. Build the solution and run the application.
 
 # Usage
 
 1. (Optional) You can record live audio from your system input. This will be saved as recordedaudio.mp3 in your root folder of Chronciler. 
-2. Enter your API key from Open AI -- or optionally press the "I need an API key" button to be directed to the page you can get one
-3. Transcribe the recorded audio using the built-in transcription button. NOTE: This sends an API request to OpenAI's Whisper API using the API key you provided. Pricing is available on the OpenAI pricing page.
+2. Enter your API key from Open AI -- or optionally press the "I need an API key" button to be directed to the page you can get one. This will be saved in your root folder as apiKey.txt
+3. Transcribe the recorded audio using the built-in transcription button. Your transcript, once finished, will display in the textbox, and will be saved to your transcriptions folder. If your file exceeds the limit, Chronicler will automatically make split copies of your audio file to be sent in chunks so that your entire transcription request can be sent in one go. NOTE: This sends an API request to OpenAI's Whisper API using the API key you provided. Pricing is available on the OpenAI pricing page.
 4. Choose one of the following actions for the transcribed text if you'd like to start dissecting your transcript:
 
 - Summarize: Summarize the transcript with as much detail as possible.
 - Highlight: Highlight key quotes from the transcript and provide a brief description of their importance.
 - Enumerate: List the main points of the text in bullet points.
 - Ask: Ask a question or give a command related to the transcript and receive an AI-generated response.
+
+Whatever is in your text box will be used in the action you choose for GPT, so if you want to remove or constrain your context and what's used for your query, be sure to clear or edit your text.
 
 NOTE: This sends a Completion API request to OpenAI's API. Pricing is available on OpenAI's pricing page.
 
