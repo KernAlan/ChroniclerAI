@@ -6,6 +6,8 @@ Turn any audio into query-able text: your really long technical meeting, that in
 
 Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
+![image](https://user-images.githubusercontent.com/63753020/228725990-af099cb1-68cf-492e-9561-8af070fd117f.png)
+
 # Features
 
 - Record live audio
@@ -22,9 +24,11 @@ Windows 10 or later
 
 # Installation
 
-Clone the repository:
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
-1. Clone the repo
+Or, if you're a developer:
+
+1. Clone the repo: git clone https://github.com/KernAlan/ChroniclerAI.git
 2. Open the solution in Visual Studio.
 3. Build the solution and run the application.
 
