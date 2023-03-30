@@ -4,7 +4,7 @@ ChroniclerAI is a desktop application that records, transcribes, and summarizes 
 
 Turn any audio into query-able text: your really long technical meeting, that interview you couldn't make, or zoom training you were supposed to watch before end of week.
 
-Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI-v2.1.zip)
 
 ![image](https://user-images.githubusercontent.com/63753020/228726833-d0102938-4be6-4ed5-85ce-0b7201c98549.png)
 
@@ -23,7 +23,7 @@ Windows 10 or later
 
 # Installation
 
-Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI-v2.1.zip)
 
 Or, if you're a developer:
 
