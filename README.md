@@ -6,7 +6,7 @@ Turn any audio into query-able text: your really long technical meeting, that in
 
 Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
-![image](https://user-images.githubusercontent.com/63753020/228725990-af099cb1-68cf-492e-9561-8af070fd117f.png)
+![image](https://user-images.githubusercontent.com/63753020/228726833-d0102938-4be6-4ed5-85ce-0b7201c98549.png)
 
 # Features
 
