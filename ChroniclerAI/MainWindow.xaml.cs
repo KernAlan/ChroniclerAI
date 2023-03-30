@@ -167,6 +167,7 @@ namespace ChroniclerAI
                 
                 OnPropertyChanged(nameof(OutputText));
                 UpdateOutputTextBox();
+                SaveTranscription();
             }
             catch (Exception ex)
             {
@@ -220,6 +221,26 @@ namespace ChroniclerAI
                 throw;
             }
            
+        }
+
+        private void SaveTranscription()
+        {
+            string folderPath = Path.Combine(Environment.CurrentDirectory, "transcriptions");
+
+            // Check if the folder exists, and create it if it doesn't
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            // Create a unique file name for the transcription file
+            string fileName = $"transcription_{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt";
+
+            // Combine the folder path and file name to create the full file path
+            string filePath = Path.Combine(folderPath, fileName);
+
+            // Write the text to the file
+            File.WriteAllText(filePath, OutputTextString);
         }
 
         private void UpdateOutputTextBox()
@@ -325,12 +346,12 @@ namespace ChroniclerAI
         {
             try
             {
-                if (ApiKey is null)
+                if (string.IsNullOrEmpty(ApiKey))
                 {
                     throw new ArgumentNullException("API Key must not be empty.");
                 }
 
-                if (OutputText is null)
+                if (OutputText is null || OutputText.Count == 0)
                 {
                     throw new ArgumentNullException("Nothing to summarize.");
                 }
@@ -370,7 +391,7 @@ namespace ChroniclerAI
                     throw new ArgumentNullException("API Key must not be empty.");
                 }
 
-                if (OutputText is null)
+                if (OutputText is null || OutputText.Count == 0)
                 {
                     throw new ArgumentNullException("Error: Nothing to highlight.");
                 }
@@ -410,7 +431,7 @@ namespace ChroniclerAI
                     throw new ArgumentNullException("API Key must not be empty.");
                 }
 
-                if (OutputText is null)
+                if (OutputText is null || OutputText.Count == 0)
                 {
                     throw new ArgumentNullException("Error: Nothing to Enumerate.");
                 }
@@ -450,7 +471,7 @@ namespace ChroniclerAI
                     throw new ArgumentNullException("API Key must not be empty.");
                 }
 
-                if (OutputText is null)
+                if (OutputText is null || OutputText.Count == 0)
                 {
                     throw new ArgumentNullException("There is nothing to ask of in the text box.");
                 }
@@ -459,7 +480,7 @@ namespace ChroniclerAI
                 
                 if (string.IsNullOrEmpty(inputString))
                 {
-                    throw new InvalidOperationException("No question or command was input.");
+                    return;
                 }
                 
                 if (inputString.Count() > 256)
@@ -470,7 +491,7 @@ namespace ChroniclerAI
                 AskButton.IsEnabled = false;
                 AskButton.Content = "Asking...";
                 var chatGptRepo = new ChatGptApiClient(ApiKey);
-                var response = "RESPONSE: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Ask);
+                var response = "RESPONSE: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Ask, inputString);
 
                 if (string.IsNullOrEmpty(response))
                 {

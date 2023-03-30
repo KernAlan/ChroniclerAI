@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="transcriptions\**" />
+    <EmbeddedResource Remove="transcriptions\**" />
+    <None Remove="transcriptions\**" />
+    <Page Remove="transcriptions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="bg1.jpg" />
     <None Remove="bg2.jpg" />
     <None Remove="bg3.jpg" />

@@ -19,12 +19,12 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Chronicler AI v2.0" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
+        <Label Content="Chronicler AI v2.1" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0,0,20">
             <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="75,10,50,20" HorizontalAlignment="Stretch" MinHeight="500" MaxHeight="600" MinWidth="597">
-                <TextBox x:Name="OutputTextBlock" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding OutputTextString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox x:Name="OutputTextBlock" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding OutputTextString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </ScrollViewer>
-            <Button Content="Clear" Width="54" Click="Clear_Click"/>
+            <Button Content="Clear" Width="65" Click="Clear_Click"/>
         </StackPanel>
 
 

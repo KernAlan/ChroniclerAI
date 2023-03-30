@@ -23,12 +23,12 @@ namespace ChroniclerAI
             _url = "https://api.openai.com/v1/chat/completions";
         }
 
-        public async Task<string> GenerateCompletion(List<string> messages, ECompletionType completionType)
+        public async Task<string> GenerateCompletion(List<string> messages, ECompletionType completionType, string inputString = "")
         {
             var fullMessageBody = string.Join(", ", messages);
             if (fullMessageBody.Count() < maxCharsPerChunk)
             {
-                var summary = await ProcessRequest(messages, completionType);
+                var summary = await ProcessRequest(messages, completionType, inputString);
                 return summary;
             }
             
@@ -49,7 +49,7 @@ namespace ChroniclerAI
                         currentMessages.Insert(0, summarizedContext.ToString());
                     }
 
-                    string generatedSummary = await ProcessRequest(currentMessages, completionType);
+                    string generatedSummary = await ProcessRequest(currentMessages, completionType, inputString);
 
                     summarizedContext.Append(generatedSummary);
                 }
@@ -73,14 +73,14 @@ namespace ChroniclerAI
             return chunks;
         }
 
-        private async Task<string> ProcessRequest(List<string> messages, ECompletionType completionType)
+        private async Task<string> ProcessRequest(List<string> messages, ECompletionType completionType, string inputString = "")
         {
             using (HttpClient client = new HttpClient())
             {
                 client.Timeout = TimeSpan.FromMinutes(10);
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
                 var messageObjects = new List<object>();
-                var systemPrompt = CreateSystemPrompt(completionType);
+                var systemPrompt = CreateSystemPrompt(completionType, inputString);
                 messageObjects.Add(new { role = "system", content = systemPrompt });
 
                 foreach (string message in messages)
@@ -127,7 +127,7 @@ namespace ChroniclerAI
             };
         }
 
-        public string CreateSystemPrompt(ECompletionType completion, string input = "")
+        public string CreateSystemPrompt(ECompletionType completion, string inputString = "")
         {
             var systemPrompt = "";
 
@@ -143,7 +143,7 @@ namespace ChroniclerAI
                     systemPrompt = "Enumerate the main points of this text in bullet points: ";
                     break;
                 case ECompletionType.Ask:
-                    systemPrompt = $"You are an AI-assistant. The following question or command is being asked of you: {input}. Please answer the previous question or command regarding the following transcript:";
+                    systemPrompt = $"The following question or command is being asked of you: {inputString}. Please use the following transcript to answer the previous question or command:";
                     break;
                 default:
                     break;
