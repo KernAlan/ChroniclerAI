@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Chronicler AI v2.1" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
+        <Label Content="Chronicler AI v2.2" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0,0,20">
             <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="75,10,50,20" HorizontalAlignment="Stretch" MinHeight="500" MaxHeight="600" MinWidth="597">
                 <TextBox x:Name="OutputTextBlock" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding OutputTextString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -43,6 +43,7 @@
             <Button x:Name="RecordButton" Content="Start Recording" Click="RecordButton_Click" Margin="20,20,20,0"/>
             <Button x:Name="TranscribeButton" Content="Transcribe" Click="Transcribe" Margin="20,10,20,0"/>
             <Label Content="ChatGPT Actions" Margin="0, 10, 0, 0"/>
+            <ComboBox x:Name="ModelSelector" SelectionChanged="ModelSelector_SelectionChanged"/>
             <Button x:Name="SummarizeButton" Content="Summarize" Click="Summarize" Margin="20,10,20,0"/>
             <Button x:Name="HighlightButton" Content="Highlight" Click="Highlight" Margin="20,10,20,0"/>
             <Button x:Name="EnumerateButton" Content="Enumerate" Click="Enumerate" Margin="20,10,20,0"/>

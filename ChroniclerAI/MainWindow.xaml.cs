@@ -25,6 +25,7 @@ namespace ChroniclerAI
         private AudioRecorder _recorder;
         private bool _isRecording;
         private HttpClient _client = new HttpClient();
+        private List<string> _models;
 
         public string? ApiKey
         {
@@ -47,10 +48,12 @@ namespace ChroniclerAI
                     }
 
                     OnPropertyChanged(nameof(ApiKey));
+                    // Initialize the models if the API key is valid
+                    InitializeModels();
                 }
             }
         }
-        
+
         public string? AudioFilePath
         {
             get => _audioFilePath;
@@ -76,7 +79,7 @@ namespace ChroniclerAI
                 }
             }
         }
-        
+
         public string OutputTextString
         {
             get => string.Join(Environment.NewLine, _outputText);
@@ -99,6 +102,27 @@ namespace ChroniclerAI
             _isRecording = false;
             _recorder = new AudioRecorder(_recordedAudioFilePath);
             _client.Timeout = TimeSpan.FromSeconds(600);
+            if (ApiKey is not null && ApiKey.Length > 0 && !ApiKey.Equals("API Key"))
+            {
+                InitializeModels();
+            }
+        }
+
+        private async void InitializeModels()
+        {
+            try
+            {
+
+                using (var chatGPTClient = new ChatGptApiClient(ApiKey))
+                {
+                    _models = await chatGPTClient.FetchAvailableModels();
+                }
+                ModelSelector.ItemsSource = _models;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not initialize GPT models list: {ex.Message}");
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -107,6 +131,13 @@ namespace ChroniclerAI
         {
 
         }
+
+        private void ModelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedModel = (string)ModelSelector.SelectedItem;
+            // Update the model used by the ChatGptApiClient
+        }
+
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -159,12 +190,12 @@ namespace ChroniclerAI
                     result = await ProcessTranscribe();
                     OutputText.Add(result);
                 }
-                
+
                 if (result is null)
                 {
                     throw new ArgumentNullException("Transcription returned empty!");
                 }
-                
+
                 OnPropertyChanged(nameof(OutputText));
                 UpdateOutputTextBox();
                 SaveTranscription();
@@ -193,7 +224,6 @@ namespace ChroniclerAI
                 {
                     throw new ArgumentNullException("No API key detected!");
                 }
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
 
                 using (var content = new MultipartFormDataContent())
                 {
@@ -201,17 +231,28 @@ namespace ChroniclerAI
                     content.Add(new StringContent("whisper-1"), "model");
                     content.Add(new StringContent("text"), "response_format");
 
-                    using (var response = await _client.PostAsync("https://api.openai.com/v1/audio/transcriptions", content))
+                    using (var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/audio/transcriptions"))
                     {
-                        if (response.IsSuccessStatusCode)
+                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
+                        request.Content = content;
+
+                        var response = await _client.SendAsync(request);
+                        try
                         {
-                            var responseContent = await response.Content.ReadAsStringAsync();
-                            return responseContent;
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                return responseContent;
+                            }
+                            else
+                            {
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                throw new Exception($"Request failed with status code {response.StatusCode}: {responseContent}");
+                            }
                         }
-                        else
+                        finally
                         {
-                            var responseContent = await response.Content.ReadAsStringAsync();
-                            throw new Exception($"Request failed with status code {response.StatusCode}: {responseContent}");
+                            response.Dispose();
                         }
                     }
                 }
@@ -220,8 +261,8 @@ namespace ChroniclerAI
             {
                 throw;
             }
-           
         }
+
 
         private void SaveTranscription()
         {
@@ -247,7 +288,7 @@ namespace ChroniclerAI
         {
             OnPropertyChanged(nameof(OutputTextString));
         }
-        
+
         private void Browse(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
@@ -306,9 +347,9 @@ namespace ChroniclerAI
             {
                 MessageBox.Show($"Failed to start recording: {ex.Message}");
             }
-            
+
         }
-        
+
         public void StopRecording(object sender, RoutedEventArgs e)
         {
             try
@@ -330,7 +371,7 @@ namespace ChroniclerAI
                 {
                     throw new ArgumentNullException("Cannot split an empty or nonexistent file.");
                 }
-                
+
                 var audioSplitter = new AudioSplitter();
                 var splitFilesList = audioSplitter.SplitAudio(AudioFilePath, Directory.GetCurrentDirectory(), TimeSpan.FromMinutes(10));
                 return splitFilesList;
@@ -358,17 +399,20 @@ namespace ChroniclerAI
 
                 SummarizeButton.IsEnabled = false;
                 SummarizeButton.Content = "Summarizing...";
-                var chatGptRepo = new ChatGptApiClient(ApiKey);
-                var summary = "SUMMARY: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Summarize);
-                
-                if (string.IsNullOrEmpty(summary))
-                {
-                    throw new ArgumentNullException("Summary was empty.");
-                }
 
-                OutputText.Add(summary);
-                OnPropertyChanged(nameof(OutputText));
-                UpdateOutputTextBox();
+                using (var chatGPTClient = new ChatGptApiClient(ApiKey))
+                {
+                    var summary = "SUMMARY: \r\n" + await chatGPTClient.GenerateCompletion(OutputText, ECompletionType.Summarize);
+
+                    if (string.IsNullOrEmpty(summary))
+                    {
+                        throw new ArgumentNullException("Summary was empty.");
+                    }
+
+                    OutputText.Add(summary);
+                    OnPropertyChanged(nameof(OutputText));
+                    UpdateOutputTextBox();
+                }
             }
             catch (Exception ex)
             {
@@ -398,17 +442,20 @@ namespace ChroniclerAI
 
                 HighlightButton.IsEnabled = false;
                 HighlightButton.Content = "Highlighting...";
-                var chatGptRepo = new ChatGptApiClient(ApiKey);
-                var highlights = "HIGHLIGHTS: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Highlight);
 
-                if (string.IsNullOrEmpty(highlights))
+                using (var chatGPTClient = new ChatGptApiClient(ApiKey))
                 {
-                    throw new ArgumentNullException("Highlights were empty.");
-                }
+                    var highlights = "HIGHLIGHTS: \r\n" + await chatGPTClient.GenerateCompletion(OutputText, ECompletionType.Highlight);
 
-                OutputText.Add(highlights);
-                OnPropertyChanged(nameof(OutputText));
-                UpdateOutputTextBox();
+                    if (string.IsNullOrEmpty(highlights))
+                    {
+                        throw new ArgumentNullException("Highlights were empty.");
+                    }
+
+                    OutputText.Add(highlights);
+                    OnPropertyChanged(nameof(OutputText));
+                    UpdateOutputTextBox();
+                }
             }
             catch (Exception ex)
             {
@@ -437,18 +484,20 @@ namespace ChroniclerAI
                 }
 
                 EnumerateButton.IsEnabled = false;
-                EnumerateButton.Content = "Enumerating...";
-                var chatGptRepo = new ChatGptApiClient(ApiKey);
-                var enumerations = "ENUMERATIONS: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Enumerate);
 
-                if (string.IsNullOrEmpty(enumerations))
+                using (var chatGPTClient = new ChatGptApiClient(ApiKey))
                 {
-                    throw new ArgumentNullException("Enumerations were empty.");
-                }
+                    var enumerations = "ENUMERATIONS: \r\n" + await chatGPTClient.GenerateCompletion(OutputText, ECompletionType.Enumerate);
 
-                OutputText.Add(enumerations);
-                OnPropertyChanged(nameof(OutputText));
-                UpdateOutputTextBox();
+                    if (string.IsNullOrEmpty(enumerations))
+                    {
+                        throw new ArgumentNullException("Enumerations were empty.");
+                    }
+
+                    OutputText.Add(enumerations);
+                    OnPropertyChanged(nameof(OutputText));
+                    UpdateOutputTextBox();
+                }
             }
             catch (Exception ex)
             {
@@ -477,12 +526,12 @@ namespace ChroniclerAI
                 }
 
                 var inputString = Microsoft.VisualBasic.Interaction.InputBox("Enter your question or command here", "Custom Ask or Command", "");
-                
+
                 if (string.IsNullOrEmpty(inputString))
                 {
                     return;
                 }
-                
+
                 if (inputString.Count() > 256)
                 {
                     throw new InvalidOperationException("Input was too long. Keep the input to a maximum of 256 characters");
@@ -490,17 +539,20 @@ namespace ChroniclerAI
 
                 AskButton.IsEnabled = false;
                 AskButton.Content = "Asking...";
-                var chatGptRepo = new ChatGptApiClient(ApiKey);
-                var response = "RESPONSE: \r\n" + await chatGptRepo.GenerateCompletion(OutputText, ECompletionType.Ask, inputString);
 
-                if (string.IsNullOrEmpty(response))
+                using (var chatGPTClient = new ChatGptApiClient(ApiKey))
                 {
-                    throw new ArgumentNullException("Response was empty.");
-                }
+                    var response = "RESPONSE: \r\n" + await chatGPTClient.GenerateCompletion(OutputText, ECompletionType.Ask, inputString);
 
-                OutputText.Add(response);
-                OnPropertyChanged(nameof(OutputText));
-                UpdateOutputTextBox();
+                    if (string.IsNullOrEmpty(response))
+                    {
+                        throw new ArgumentNullException("Response was empty.");
+                    }
+
+                    OutputText.Add(response);
+                    OnPropertyChanged(nameof(OutputText));
+                    UpdateOutputTextBox();
+                }
             }
             catch (Exception ex)
             {
@@ -537,7 +589,7 @@ namespace ChroniclerAI
             MessageBox.Show("Copyright © 2023 Alan Kern. This software was a labor of love provided free of charge and open-sourced via an MIT license.");
 
         }
-        
+
         public void Donate_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://www.paypal.com/donate/?business=7CEJDV8VQ9BTL&no_recurring=0&currency_code=USD";

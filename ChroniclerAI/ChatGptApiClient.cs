@@ -1,26 +1,60 @@
 ﻿using ChroniclerAI;
 using Newtonsoft.Json;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ChroniclerAI
 {
-    public class ChatGptApiClient
+    public class ChatGptApiClient : IDisposable
     {
         private readonly string _apiKey;
         private readonly string _url;
         private int maxCharsPerChunk = 10000; // Estimated characters, assuming 5 characters per token
+        private HttpClient? _httpClient;
+        private bool _disposed = false;
 
 
         public ChatGptApiClient(string apiKey)
         {
             _apiKey = apiKey;
             _url = "https://api.openai.com/v1/chat/completions";
+            InitializeHttpClient();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (_httpClient != null)
+                    {
+                        _httpClient.Dispose();
+                        _httpClient = null;
+                    }
+                }
+
+                _disposed = true;
+            }
+        }
+
+        private void InitializeHttpClient()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         }
 
         public async Task<string> GenerateCompletion(List<string> messages, ECompletionType completionType, string inputString = "")
@@ -31,7 +65,7 @@ namespace ChroniclerAI
                 var summary = await ProcessRequest(messages, completionType, inputString);
                 return summary;
             }
-            
+
             StringBuilder summarizedContext = new StringBuilder();
 
             // Generate summarized context
@@ -75,39 +109,36 @@ namespace ChroniclerAI
 
         private async Task<string> ProcessRequest(List<string> messages, ECompletionType completionType, string inputString = "")
         {
-            using (HttpClient client = new HttpClient())
+            _httpClient.Timeout = TimeSpan.FromMinutes(10);
+            var messageObjects = new List<object>();
+            var systemPrompt = CreateSystemPrompt(completionType, inputString);
+            messageObjects.Add(new { role = "system", content = systemPrompt });
+
+            foreach (string message in messages)
             {
-                client.Timeout = TimeSpan.FromMinutes(10);
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
-                var messageObjects = new List<object>();
-                var systemPrompt = CreateSystemPrompt(completionType, inputString);
-                messageObjects.Add(new { role = "system", content = systemPrompt });
-
-                foreach (string message in messages)
-                {
-                    messageObjects.Add(new { role = "user", content = message });
-                }
-
-                var request = CreateRequest(messageObjects, 500);
-                var json = JsonConvert.SerializeObject(request);
-                var contentData = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(_url, contentData);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    throw new HttpRequestException($"Error {response.StatusCode}: {response.ReasonPhrase} - {responseContent}");
-                }
-
-                var responseJson = await response.Content.ReadAsStringAsync();
-                var responseObject = JsonConvert.DeserializeObject<ChatResponse>(responseJson);
-
-                if (responseObject == null || responseObject.Choices == null || responseObject.Choices[0].Message.Content == null)
-                {
-                    throw new Exception("Error deserializing response JSON from OpenAI.");
-                }
-                return responseObject.Choices[0].Message.Content;
+                messageObjects.Add(new { role = "user", content = message });
             }
+
+            var request = CreateRequest(messageObjects, 500);
+            var json = JsonConvert.SerializeObject(request);
+            var contentData = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(_url, contentData);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Error {response.StatusCode}: {response.ReasonPhrase} - {responseContent}");
+            }
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<ChatResponse>(responseJson);
+
+            if (responseObject == null || responseObject.Choices == null || responseObject.Choices[0].Message.Content == null)
+            {
+                throw new Exception("Error deserializing response JSON from OpenAI.");
+            }
+            response.Dispose();
+            return responseObject.Choices[0].Message.Content;
         }
 
         public object CreateRequest(List<object> messageObjects, int maxTokens)
@@ -151,7 +182,36 @@ namespace ChroniclerAI
 
             return systemPrompt;
         }
+
+        public async Task<List<string>> FetchAvailableModels()
+        {
+            _httpClient.Timeout = TimeSpan.FromMinutes(10);
+
+            var response = await _httpClient.GetAsync("https://api.openai.com/v1/models");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Error {response.StatusCode}: {response.ReasonPhrase} - {responseContent}");
+            }
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<ModelResponse>(responseJson);
+
+            if (responseObject == null || responseObject.Data == null)
+            {
+                throw new Exception("Error deserializing response JSON from OpenAI.");
+            }
+
+            return responseObject.Data
+                .Select(m => m.Id)
+                .Where(id => id.Contains("gpt"))
+                .ToList();
+        }
+
+
     }
+
 
     public class ChatResponse
     {
@@ -181,36 +241,15 @@ namespace ChroniclerAI
         public int CompletionTokens { get; set; }
         public int TotalTokens { get; set; }
     }
+
+    public class ModelResponse
+    {
+        public ModelData[] Data { get; set; }
+    }
+
+    public class ModelData
+    {
+        public string Id { get; set; }
+    }
+
 }
-
-
-//public async Task<string> GenerateCompletion(List<string> messages, ECompletionType completionType)
-//{
-//    var messageObjects = new List<object>();
-//    var systemPrompt = CreateSystemPrompt(completionType);
-//    messageObjects.Add(new { role = "system", content = systemPrompt });
-
-//    foreach (string message in messages)
-//    {
-//        messageObjects.Add(new { role = "user", content = message });
-//    }
-
-//    var request = CreateRequest(messageObjects);
-//    var json = JsonConvert.SerializeObject(request);
-//    var contentData = new StringContent(json, Encoding.UTF8, "application/json");
-//    var response = await _client.PostAsync(_url, contentData);
-
-//    if (!response.IsSuccessStatusCode)
-//    {
-//        throw new HttpRequestException($"Error {response.StatusCode}: {response.ReasonPhrase}");
-//    }
-
-//    var responseJson = await response.Content.ReadAsStringAsync();
-//    var responseObject = JsonConvert.DeserializeObject<ChatResponse>(responseJson);
-
-//    if (responseObject == null || responseObject.Choices == null || responseObject.Choices[0].Message.Content == null)
-//    {
-//        throw new Exception("Error deserializing response JSON from OpenAI.");
-//    }
-//    return responseObject.Choices[0].Message.Content;
-//}
