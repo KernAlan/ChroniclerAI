@@ -4,9 +4,9 @@ ChroniclerAI is a desktop application that records, transcribes, and summarizes 
 
 Turn any audio into query-able text: your really long technical meeting, that interview you couldn't make, or zoom training you were supposed to watch before end of week.
 
-Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI-v2.1.zip)
+Quick download: Here is the zip file of the release build [here](https://github.com/KernAlan/ChroniclerAI/blob/master/ChroniclerAI/bin/Release/ChroniclerAI.zip)
 
-![image](https://user-images.githubusercontent.com/63753020/228726833-d0102938-4be6-4ed5-85ce-0b7201c98549.png)
+![image](https://github.com/KernAlan/ChroniclerAI/assets/63753020/ba8246fa-5bcd-4842-9483-a803822f566e)
 
 # Features
 
@@ -50,6 +50,10 @@ NOTE: This sends a Completion API request to OpenAI's API. Pricing is available 
 # Configuration
 
 All you need is an API key from OpenAI. There is a button which links you directly to the page. Pricing is listed on the OpenAI pricing page -- let's face it, it's a steal.
+
+# Release updates
+
+- 2022-07-07 - v2.2 release! Gives you the option to select any of the available GPT models for OpenAI to do your querying.
 
 # Contributing
 
